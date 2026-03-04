@@ -23,13 +23,13 @@ python code/baseline_pipeline.py
 
 Outputs (metrics + figures) are saved under `outputs/` (e.g., `outputs/figs/`).
 
-## EDA (optional)
+## EDA 
 
 ```bash
 jupyter notebook code/eda.ipynb
 ```
 
-(Recommended) Clear outputs before committing:
+Clear outputs before committing:
 
 ```bash
 jupyter nbconvert --ClearOutputPreprocessor.enabled=True --inplace code/eda.ipynb
