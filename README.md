@@ -1,29 +1,30 @@
-# 552 Bank Marketing（Term Deposit Subscription Prediction）
+# DATA 552 Bank Marketing  
+**Term Deposit Subscription Prediction**
 
-本仓库用于完成 UBC MDS DATA 552 项目：基于葡萄牙银行直销营销数据，预测客户是否会订阅定期存款（`y=yes/no`）。包含 **EDA** 与可复现的 **baseline 建模评估流水线**（训练/测试划分、指标、Top-k 业务指标、输出图表）。
+This repository supports a DATA 552 project using the Portuguese bank direct marketing dataset to predict whether a client will subscribe to a term deposit (`y=yes/no`). It includes an **EDA notebook** and a reproducible **baseline modeling pipeline** (training/testing, metrics, top-k business metrics, and saved figures).
 
 ---
 
-## 目录结构
+## Repository Structure
 
 ```
 .
-├── bank/                 # 原始数据（bank 数据版本，解压后的文件夹）
-├── bank-additional/      # 原始数据（bank-additional 数据版本，解压后的文件夹）
+├── bank/                 # Raw dataset folder (Bank Marketing "bank" version)
+├── bank-additional/      # Raw dataset folder (Bank Marketing "bank-additional" version)
 ├── code/
-│   ├── baseline_pipeline.py   # 主流水线脚本（训练/评估/产出图表）
-│   └── eda.ipynb              # EDA Notebook
-├── data/                 # 处理后的/中间数据（建议不提交到 git）
-└── outputs/              # 运行产出（指标、figs 等，建议不提交到 git）
+│   ├── baseline_pipeline.py   # Main pipeline script (train/evaluate/save figures)
+│   └── eda.ipynb              # EDA notebook
+├── data/                 # Intermediate/processed data (recommended: do NOT commit)
+└── outputs/              # Run artifacts (metrics/figures, recommended: do NOT commit)
 ```
 
-> 说明：`bank/` 与 `bank-additional/` 通常来自 UCI Bank Marketing 数据集的不同版本。你的脚本会使用其中某一个（或两者），以 `baseline_pipeline.py` 的实际读取路径为准。
+> Note: `bank/` and `bank-additional/` typically come from different variants of the UCI Bank Marketing dataset. The actual folder used depends on the paths configured in `code/baseline_pipeline.py`.
 
 ---
 
-## 快速开始
+## Quick Start
 
-### 1) 创建环境（推荐：conda + pip）
+### 1) Create an environment (recommended: conda + pip)
 
 ```bash
 conda create -n bank552 python=3.11 -y
@@ -33,62 +34,61 @@ pip install -U pip
 pip install numpy pandas scikit-learn matplotlib joblib jupyter
 ```
 
-如脚本使用了额外依赖（例如 `xgboost` / `lightgbm`），按脚本 import 安装即可。
+If your pipeline imports additional libraries (e.g., `xgboost`, `lightgbm`), install them as needed.
 
 ---
 
-## 数据准备
+## Data Setup
 
-### 原始数据放置
+### Raw data placement
 
-- 将解压后的数据文件夹放在项目根目录下：
-  - `bank/` 或 `bank-additional/`
+Place the unzipped raw data folders at the repo root:
 
-### 中间数据与产出
+- `bank/` and/or `bank-additional/`
 
-- `data/`：中间数据（可选）
-- `outputs/`：运行输出（图、指标文件等）
+### Intermediate data & outputs
 
-建议不要把 `data/` 与 `outputs/` 提交到 git（避免仓库过大，且便于复现）。
+- `data/`: intermediate/processed data (optional)
+- `outputs/`: generated figures, metrics, etc.
+
+Recommended: do **not** commit `data/` or `outputs/` to keep the repo lightweight and reproducible.
 
 ---
 
-## 运行方式
+## How to Run
 
-在项目根目录运行：
+From the repo root:
 
 ```bash
 python code/baseline_pipeline.py
 ```
 
-一般会在终端输出：
-- ROC-AUC、PR-AUC、F1 等分类指标
-- Top 10% Precision / Lift 等业务指标
-
-并把图表/结果保存到：
-- `outputs/`（例如 `outputs/figs/`）
+Typical outputs:
+- Classification metrics (ROC-AUC, PR-AUC, F1, etc.)
+- Business-oriented metrics (e.g., Top 10% Precision / Lift)
+- Figures and artifacts saved under `outputs/` (often `outputs/figs/`)
 
 ---
 
-## 建模与评估约定
+## Modeling & Evaluation Conventions
 
-- **Target**：`y`（`yes`/`no`）
-- **Class imbalance**：通常 `y=yes` 占比较低，因此 **PR-AUC** 与 **Top-k** 指标更有解释力
-- **Deployable vs Upper-bound（如适用）**
-  - 部署模型：排除泄露特征（常见：`duration`）
-  - 上界模型：可包含 `duration` 作为性能上限参考（不用于真实部署）
+- **Target**: `y` (`yes` / `no`)
+- **Class imbalance**: `y=yes` is often the minority class, so **PR-AUC** and **Top-k** metrics are especially informative.
+- **Deployable vs Upper-bound (if applicable)**
+  - *Deployable models*: exclude leakage features (commonly `duration`)
+  - *Upper-bound models*: may include `duration` as a performance ceiling (not deployable)
 
 ---
 
-## EDA（可选但推荐）
+## EDA (Optional but Recommended)
 
-打开 notebook：
+Open the notebook:
 
 ```bash
 jupyter notebook code/eda.ipynb
 ```
 
-建议在提交/协作前清理 notebook 输出（降低 diff 与仓库体积）：
+Before committing, it’s recommended to clear notebook outputs to reduce repo size and noisy diffs:
 
 ```bash
 jupyter nbconvert --ClearOutputPreprocessor.enabled=True --inplace code/eda.ipynb
@@ -96,16 +96,16 @@ jupyter nbconvert --ClearOutputPreprocessor.enabled=True --inplace code/eda.ipyn
 
 ---
 
-## Git 建议（可选）
+## Git Recommendations (Optional)
 
-推荐 `.gitignore` 至少包含：
+Your `.gitignore` should typically include:
 
 - `data/`
 - `outputs/`
 - `.ipynb_checkpoints/`
 - `__pycache__/`
 
-示例：
+Example:
 
 ```gitignore
 data/
@@ -118,16 +118,17 @@ __pycache__/
 
 ---
 
-## 复现说明
+## Reproducibility Notes
 
-如需他人完全复现你的结果，请在以下位置补充/固定：
-- `baseline_pipeline.py` 中的数据读取路径与文件名
-- 随机种子（`random_state`）
-- 训练/测试划分策略
-- 输出路径（`outputs/`）
+To make results fully reproducible for others, ensure the following are fixed/documented:
+
+- Data file names/paths used by `baseline_pipeline.py`
+- Random seeds (`random_state`)
+- Train/test splitting strategy
+- Output paths under `outputs/`
 
 ---
 
-## 许可
+## License
 
-课程项目用途。如需开源发布，请补充 License。
+Course project use. Add a license if you plan to open-source this repository.
